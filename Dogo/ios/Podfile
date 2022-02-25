@@ -12,6 +12,8 @@ target 'Dogo' do
     :hermes_enabled => false
   )
 
+  pod 'ReactNativeLocalization', :path => '../node_modules/react-native-localization'
+
   target 'DogoTests' do
     inherit! :complete
     # Pods for testing
