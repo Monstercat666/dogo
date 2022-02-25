@@ -6,7 +6,6 @@ const Styles = StyleSheet.create({
   container: {
     width: '100%',
     padding: Spacings.Small,
-    borderWidth: 1,
   },
   textInput: {
     borderWidth: 1,

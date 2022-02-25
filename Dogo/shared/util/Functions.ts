@@ -1,11 +1,13 @@
 import {allBreedsURL, FETCH, JSONHeaders} from '../../backend/api/Api';
 import {Result} from './Failure';
 
-export async function getAllBreeds(): Promise<
-  Result<Map<string, Array<string>>>
-> {
+export type MasterAndSubBreeds = {
+  [masterBreed: string]: string[];
+};
+
+export async function getAllBreeds(): Promise<Result<MasterAndSubBreeds>> {
   const result = await FETCH(allBreedsURL, JSONHeaders);
 
   // Type assertion because https://dog.ceo/dog-api/documentation/ precises the succesful message type
-  return result as Result<Map<string, Array<string>>>;
+  return result as Result<MasterAndSubBreeds>;
 }

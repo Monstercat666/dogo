@@ -1,13 +1,11 @@
 import React, {useEffect, useState, FC} from 'react';
 import {InteractionManager} from 'react-native';
 import {isFailure} from '../../../util/Failure';
-import {getAllBreeds} from '../../../util/Functions';
+import {MasterAndSubBreeds, getAllBreeds} from '../../../util/Functions';
 import {HomeComponent} from '../component';
 
-export type AllBreeds = Map<string, Array<string>>;
-
 export const Home: FC = () => {
-  const [allBreeds, setAllBreeds] = useState<AllBreeds>();
+  const [allBreeds, setAllBreeds] = useState<MasterAndSubBreeds>();
 
   useEffect(() => {
     InteractionManager.runAfterInteractions(() => {
