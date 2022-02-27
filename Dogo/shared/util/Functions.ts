@@ -1,13 +1,56 @@
-import {allBreedsURL, FETCH, JSONHeaders} from '../../backend/api/Api';
+import {
+  allBreedsURL,
+  breedImagesURL as breedImagesURL,
+  breedImagesURLRandom,
+  FETCH,
+  JSONHeaders,
+  URL,
+} from '../../backend/api/Api';
 import {Result} from './Failure';
 import {MasterAndSubBreeds, FilteredBreedsMap} from './Types';
 import _ from 'lodash';
 
+const BreedsSeperator = '-';
+
 export async function getAllBreeds(): Promise<Result<MasterAndSubBreeds>> {
-  const result = await FETCH(allBreedsURL, JSONHeaders);
+  const result = await FETCH(constructListAllBreedsURL(), JSONHeaders);
 
   // Type assertion because https://dog.ceo/dog-api/documentation/ precises the succesful message type
   return result as Result<MasterAndSubBreeds>;
+}
+
+export async function getBreedImages(masterBreed: string) {
+  const result = await FETCH(constructBreedImagesURL(masterBreed), JSONHeaders);
+
+  // Type assertion because https://dog.ceo/dog-api/documentation/ precises the succesful message type
+  return result as Result<string[]>;
+}
+
+export async function getRandomMasterBreedImages(
+  masterBreed: string,
+  count: number,
+) {
+  const result = await FETCH(
+    constructRandomBreedImagesURL(masterBreed, count),
+    JSONHeaders,
+  );
+
+  // Type assertion because https://dog.ceo/dog-api/documentation/ precises the succesful message type
+  return result as Result<string[]>;
+}
+
+export async function getRandomSubBreedImages(
+  masterBreed: string,
+  subBreed: string,
+  count: number,
+) {
+  const result = await FETCH(
+    constructRandomBreedImagesURL(masterBreed + '/' + subBreed, count),
+    JSONHeaders,
+  );
+
+  // Type assertion because https://dog.ceo/dog-api/documentation/ precises the succesful message type
+  return result as Result<string[]>;
 }
 
 // When it comes to filtering, I had the choice to make this function that will allow me to edit the hidden property based on the filter input
@@ -64,4 +107,37 @@ export function filterBreeds(
   });
 
   return allBreeds;
+}
+
+export function constructListAllBreedsURL(): string {
+  return URL + allBreedsURL;
+}
+
+export function constructBreedImagesURL(breedName: string): string {
+  return URL + breedName + breedImagesURL;
+}
+
+export function constructRandomBreedImagesURL(
+  breedName: string,
+  count: number,
+): string {
+  return (
+    URL +
+    breedName +
+    breedImagesURL +
+    breedImagesURLRandom +
+    '/' +
+    count.toString()
+  );
+}
+
+export function getMasterSubBreedCombinationString(
+  masterBreed: string,
+  subBreed: string,
+): string {
+  return masterBreed + BreedsSeperator + subBreed;
+}
+
+export function extractBreedFromImageURL(imageURL: string): string {
+  return imageURL.split('/')[4];
 }

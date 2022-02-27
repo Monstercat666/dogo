@@ -6,7 +6,13 @@ export const JSONHeaders = {
     'Content-Type': 'application/json',
   },
 };
-export const allBreedsURL = 'https://dog.ceo/api/breeds/list/all';
+
+export const URL = 'https://dog.ceo/api/breed';
+
+export const allBreedsURL = '/list/all';
+
+export const breedImagesURL = '/images';
+export const breedImagesURLRandom = '/random';
 
 export async function FETCH(
   input: RequestInfo,

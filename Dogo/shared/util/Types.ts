@@ -13,3 +13,5 @@ export type FilteredSubBreeds = {
   name: string;
   hidden?: boolean;
 };
+
+export type BreedImagesMap = Map<string, string[]>;

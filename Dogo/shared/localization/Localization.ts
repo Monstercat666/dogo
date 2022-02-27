@@ -2,12 +2,16 @@ import LocalizedStrings from 'react-native-localization';
 
 let strings = new LocalizedStrings({
   en: {
+    dogo: 'Dogo',
     filterPlaceHolder: 'Filter the Breeds',
     back: 'Back',
+    gallery: 'Gallery',
   },
   fr: {
+    dogo: 'Dogo',
     filterPlaceHolder: 'Filtrer les Races',
     back: 'Retour',
+    gallery: 'Gallerie',
   },
 });
 
