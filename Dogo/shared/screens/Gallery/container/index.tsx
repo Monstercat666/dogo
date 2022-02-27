@@ -1,20 +1,22 @@
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useContext, useEffect, useState} from 'react';
+import {ActivityIndicator} from 'react-native';
 import {GlobalDataContext} from '../../../context/GlobalContext';
 import {useIsMounted} from '../../../hooks/useIsMounted';
 import strings, {
   capitalizeFirstLetter,
 } from '../../../localization/Localization';
 import {Route, RouteName} from '../../../navigation/Routes';
+import Colors from '../../../styles/Colors';
 import {isFailure} from '../../../util/Failure';
 import {
-  extractBreedFromImageURL,
   getMasterSubBreedCombinationString,
   getRandomMasterBreedImages,
   getRandomSubBreedImages,
 } from '../../../util/Functions';
 import {GalleryComponent} from '../component';
+import Styles from '../component/Styles';
 
 interface Props {
   navigation?: NativeStackNavigationProp<Route>;
@@ -31,13 +33,14 @@ export const Gallery: React.FC<Props> = props => {
   const isMounted = useIsMounted();
 
   useEffect(() => {
-    const subBreedName = props.route.params.subBreed?.name;
-    const mainBreedName = props.route.params.mainBreed?.name;
+    const subBreedName = props.route?.params?.subBreed?.name;
+    const masterBreedName = props.route?.params?.masterBreed?.name;
+    const isSubBreed: boolean = subBreedName && masterBreedName;
 
     function handleScreenTitle() {
       navigation.setOptions({
         title: capitalizeFirstLetter(
-          subBreedName ?? mainBreedName ?? strings.gallery,
+          subBreedName ?? masterBreedName ?? strings.gallery,
         ),
       });
     }
@@ -47,74 +50,32 @@ export const Gallery: React.FC<Props> = props => {
         return;
       }
 
-      // If it's a sub breed
-      if (subBreedName && mainBreedName) {
-        const _key = getMasterSubBreedCombinationString(
-          mainBreedName,
-          subBreedName,
-        );
-        const _twoBreedImages = breedImages.get(_key);
-        // Check if the value already exists in the contet
-        if (_twoBreedImages?.length && _twoBreedImages.length > 1) {
-          setImages([_twoBreedImages[0], _twoBreedImages[1]]);
-        } else {
-          // Fetch the value from the api
-          const twoRandomImages = await getRandomSubBreedImages(
-            mainBreedName,
-            subBreedName,
-            2,
-          );
-          if (!isMounted.current) {
-            return;
-          }
-          if (isFailure(twoRandomImages)) {
-            return twoRandomImages;
-          }
+      // Define the key for the Map
+      const _key = isSubBreed
+        ? getMasterSubBreedCombinationString(masterBreedName, subBreedName)
+        : masterBreedName;
 
-          setImages([twoRandomImages[0], twoRandomImages[1]]);
-          breedImages.set(_key, twoRandomImages);
-          setBreedImages(new Map(breedImages));
+      // Check if the value exists in the context map
+      const _twoBreedImages = breedImages.get(_key);
+
+      if (_twoBreedImages?.length && _twoBreedImages.length > 1) {
+        setImages([_twoBreedImages[0], _twoBreedImages[1]]);
+      } else {
+        // Fetch the value
+        const twoRandomImages = isSubBreed
+          ? await getRandomSubBreedImages(masterBreedName, subBreedName, 2)
+          : await getRandomMasterBreedImages(masterBreedName, 2);
+        if (!isMounted.current) {
+          return;
         }
-      }
-      // If it's a master breed
-      else if (mainBreedName) {
-        if (false) {
-          // TODO
-          // check in the context but the checking will be tricky here
-        } else {
-          const twoRandomImages = await getRandomMasterBreedImages(
-            mainBreedName,
-            2,
-          );
-          if (!isMounted.current) {
-            return;
-          }
-          if (isFailure(twoRandomImages)) {
-            return twoRandomImages;
-          }
-
-          twoRandomImages.forEach(randomImage => {
-            const breedKey = extractBreedFromImageURL(randomImage);
-            const _twoCachedImages = breedImages.get(breedKey);
-
-            if (_twoCachedImages) {
-              if (_twoCachedImages.length === 2) {
-                // We shift and push to make sure the recent image is added and the oldest one is removed
-                // the two random images of the master breed could be for the same sub breed
-                // for example: hound-afghan and hound-afghan
-                _twoCachedImages?.shift();
-                _twoCachedImages?.push(randomImage);
-              } else if (_twoCachedImages.length === 1) {
-                _twoCachedImages?.push(randomImage);
-              }
-            } else {
-              breedImages.set(breedKey, [randomImage]);
-            }
-          });
-
-          setImages([twoRandomImages[0], twoRandomImages[1]]);
-          setBreedImages(new Map(breedImages));
+        if (isFailure(twoRandomImages)) {
+          return twoRandomImages;
         }
+
+        // Update the context
+        setImages([twoRandomImages[0], twoRandomImages[1]]);
+        breedImages.set(_key, [twoRandomImages[0], twoRandomImages[1]]);
+        setBreedImages(new Map(breedImages));
       }
     }
 
@@ -122,5 +83,17 @@ export const Gallery: React.FC<Props> = props => {
     getAndStoreBreedImages();
   }, [props.route?.params]);
 
-  return <GalleryComponent images={images} />;
+  return (
+    <>
+      {images ? (
+        <GalleryComponent images={images} />
+      ) : (
+        <ActivityIndicator
+          size={'large'}
+          color={Colors.Blue}
+          style={Styles.activityIndicatorStyle}
+        />
+      )}
+    </>
+  );
 };

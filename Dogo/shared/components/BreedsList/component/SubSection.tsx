@@ -3,23 +3,23 @@ import React from 'react';
 import {Text, StyleProp, ViewStyle, TouchableOpacity} from 'react-native';
 import {capitalizeFirstLetter} from '../../../localization/Localization';
 import {RouteName} from '../../../navigation/Routes';
-import {FilteredSubBreeds} from '../../../util/Types';
+import {FilteredMasterBreeds, FilteredSubBreeds} from '../../../util/Types';
 import Styles from './Styles';
 
 interface Props {
-  mainBreedName: string;
+  masterBreed: FilteredMasterBreeds;
   subBreed: FilteredSubBreeds;
   containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const SubSection: React.FC<Props> = props => {
-  const {subBreed, containerStyle, mainBreedName} = props;
+  const {subBreed, containerStyle, masterBreed} = props;
 
   const navigation = useNavigation();
 
   function handleNavigation() {
     navigation.navigate(RouteName.GalleryScreen, {
-      mainBreed: mainBreedName,
+      masterBreed: masterBreed,
       subBreed: subBreed,
     });
   }

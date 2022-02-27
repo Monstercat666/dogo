@@ -9,7 +9,7 @@ export const JSONHeaders = {
 
 export const URL = 'https://dog.ceo/api/breed';
 
-export const allBreedsURL = '/list/all';
+export const allBreedsURL = 's/list/all';
 
 export const breedImagesURL = '/images';
 export const breedImagesURLRandom = '/random';

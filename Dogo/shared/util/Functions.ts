@@ -19,13 +19,6 @@ export async function getAllBreeds(): Promise<Result<MasterAndSubBreeds>> {
   return result as Result<MasterAndSubBreeds>;
 }
 
-export async function getBreedImages(masterBreed: string) {
-  const result = await FETCH(constructBreedImagesURL(masterBreed), JSONHeaders);
-
-  // Type assertion because https://dog.ceo/dog-api/documentation/ precises the succesful message type
-  return result as Result<string[]>;
-}
-
 export async function getRandomMasterBreedImages(
   masterBreed: string,
   count: number,
@@ -109,20 +102,17 @@ export function filterBreeds(
   return allBreeds;
 }
 
-export function constructListAllBreedsURL(): string {
+function constructListAllBreedsURL(): string {
   return URL + allBreedsURL;
 }
 
-export function constructBreedImagesURL(breedName: string): string {
-  return URL + breedName + breedImagesURL;
-}
-
-export function constructRandomBreedImagesURL(
+function constructRandomBreedImagesURL(
   breedName: string,
   count: number,
 ): string {
   return (
     URL +
+    '/' +
     breedName +
     breedImagesURL +
     breedImagesURLRandom +
@@ -136,8 +126,4 @@ export function getMasterSubBreedCombinationString(
   subBreed: string,
 ): string {
   return masterBreed + BreedsSeperator + subBreed;
-}
-
-export function extractBreedFromImageURL(imageURL: string): string {
-  return imageURL.split('/')[4];
 }

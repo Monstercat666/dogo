@@ -1,20 +1,18 @@
 import React from 'react';
-import {View} from 'react-native';
-import Spacings from '../../../styles/Spacings';
+import {View, Image} from 'react-native';
+import Styles from './Styles';
 
-interface Props {}
+interface Props {
+  images: [string, string];
+}
 
-export const GalleryComponent: React.FC<Props> = () => {
+export const GalleryComponent: React.FC<Props> = props => {
+  const {images} = props;
+
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingHorizontal: Spacings.Large,
-        paddingVertical: Spacings.Medium,
-        justifyContent: 'space-between',
-      }}>
-      {/* <Image source={}/> */}
-      {/* <Image /> */}
+    <View style={Styles.container}>
+      <Image style={Styles.firstImage} source={{uri: images[0]}} />
+      <Image style={Styles.secondImage} source={{uri: images[1]}} />
     </View>
   );
 };

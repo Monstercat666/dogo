@@ -8,38 +8,38 @@ import {useNavigation} from '@react-navigation/native';
 import {RouteName} from '../../../navigation/Routes';
 
 interface Props {
-  mainBreed: FilteredMasterBreeds;
+  masterBreed: FilteredMasterBreeds;
   containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const MasterSection: React.FC<Props> = props => {
-  const {mainBreed, containerStyle} = props;
+  const {masterBreed, containerStyle} = props;
 
   const navigation = useNavigation();
 
   function handleNavigation() {
     navigation.navigate(RouteName.GalleryScreen, {
-      mainBreed: mainBreed,
+      masterBreed: masterBreed,
     });
   }
 
   return (
     <>
-      {!mainBreed.hidden && (
+      {!masterBreed.hidden && (
         <View>
           <TouchableOpacity
             style={[Styles.masterSectionContainer, containerStyle]}
             onPress={handleNavigation}>
             <Text style={Styles.masterSectionTextStyle} numberOfLines={1}>
-              {capitalizeFirstLetter(mainBreed.name)}
+              {capitalizeFirstLetter(masterBreed.name)}
             </Text>
           </TouchableOpacity>
-          {mainBreed.subBreeds.map(subBreed => {
+          {masterBreed.subBreeds.map(subBreed => {
             return (
               <SubSection
                 key={subBreed.name}
                 containerStyle={Styles.divider}
-                mainBreedName={mainBreed.name}
+                masterBreed={masterBreed}
                 subBreed={subBreed}
               />
             );

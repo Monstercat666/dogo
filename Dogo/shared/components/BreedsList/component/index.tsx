@@ -14,7 +14,7 @@ export const BreedsListComponent: React.FC<Props> = props => {
         data={Array.from(breeds.values())}
         renderItem={({item}) => {
           return (
-            <MasterSection mainBreed={item} containerStyle={Styles.divider} />
+            <MasterSection masterBreed={item} containerStyle={Styles.divider} />
           );
         }}
       />
