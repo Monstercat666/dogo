@@ -1,8 +1,11 @@
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useContext, useEffect, useState} from 'react';
-import {ActivityIndicator} from 'react-native';
-import {GlobalDataContext} from '../../../context/GlobalContext';
+import {ActivityIndicator, InteractionManager} from 'react-native';
+import {
+  getAndStoreBreedImages,
+  GlobalDataContext,
+} from '../../../context/GlobalContext';
 import {useIsMounted} from '../../../hooks/useIsMounted';
 import strings, {
   capitalizeFirstLetter,
@@ -10,11 +13,6 @@ import strings, {
 import {Route, RouteName} from '../../../navigation/Routes';
 import Colors from '../../../styles/Colors';
 import {isFailure} from '../../../util/Failure';
-import {
-  getMasterSubBreedCombinationString,
-  getRandomMasterBreedImages,
-  getRandomSubBreedImages,
-} from '../../../util/Functions';
 import {GalleryComponent} from '../component';
 import Styles from '../component/Styles';
 
@@ -32,61 +30,51 @@ export const Gallery: React.FC<Props> = props => {
 
   const isMounted = useIsMounted();
 
+  const subBreedName: string = props.route?.params?.subBreed?.name;
+  const masterBreedName: string = props.route?.params?.masterBreed?.name;
+
   useEffect(() => {
-    const subBreedName = props.route?.params?.subBreed?.name;
-    const masterBreedName = props.route?.params?.masterBreed?.name;
-    const isSubBreed: boolean = subBreedName && masterBreedName;
-
-    function handleScreenTitle() {
-      navigation.setOptions({
-        title: capitalizeFirstLetter(
-          subBreedName ?? masterBreedName ?? strings.gallery,
-        ),
-      });
-    }
-
-    async function getAndStoreBreedImages() {
-      if (!props.route?.params) {
-        return;
-      }
-
-      // Define the key for the Map
-      const _key = isSubBreed
-        ? getMasterSubBreedCombinationString(masterBreedName, subBreedName)
-        : masterBreedName;
-
-      // Check if the value exists in the context map
-      const _twoBreedImages = breedImages.get(_key);
-
-      if (_twoBreedImages?.length && _twoBreedImages.length > 1) {
-        setImages([_twoBreedImages[0], _twoBreedImages[1]]);
-      } else {
-        // Fetch the value
-        const twoRandomImages = isSubBreed
-          ? await getRandomSubBreedImages(masterBreedName, subBreedName, 2)
-          : await getRandomMasterBreedImages(masterBreedName, 2);
-        if (!isMounted.current) {
-          return;
-        }
-        if (isFailure(twoRandomImages)) {
-          return twoRandomImages;
-        }
-
-        // Update the context
-        setImages([twoRandomImages[0], twoRandomImages[1]]);
-        breedImages.set(_key, [twoRandomImages[0], twoRandomImages[1]]);
-        setBreedImages(new Map(breedImages));
-      }
-    }
-
-    handleScreenTitle();
-    getAndStoreBreedImages();
+    InteractionManager.runAfterInteractions(() => {
+      handleScreenTitle();
+      _getAndStoreBreedImages();
+    });
   }, [props.route?.params]);
+
+  function handleScreenTitle() {
+    navigation.setOptions({
+      title: capitalizeFirstLetter(
+        subBreedName ?? masterBreedName ?? strings.gallery,
+      ),
+    });
+  }
+
+  async function _getAndStoreBreedImages(forceFetch?: boolean) {
+    const _images = await getAndStoreBreedImages(
+      masterBreedName,
+      subBreedName,
+      breedImages,
+      setBreedImages,
+      forceFetch,
+    );
+    if (!isMounted.current) {
+      return;
+    }
+    if (isFailure(_images)) {
+      return _images;
+    }
+
+    setImages([_images[0], _images[1]]);
+  }
 
   return (
     <>
       {images ? (
-        <GalleryComponent images={images} />
+        <GalleryComponent
+          images={images}
+          handleRefresh={() => {
+            _getAndStoreBreedImages(true);
+          }}
+        />
       ) : (
         <ActivityIndicator
           size={'large'}
