@@ -11,19 +11,22 @@ import {
 } from '../util/Functions';
 import {
   BreedImagesMap as BreedImagesMap,
-  FilteredBreedsMap,
+  FilteredBreedsMapWithFlag,
 } from '../util/Types';
 
 export const GlobalDataContext = createContext<{
-  filterFormattedBreedsMap?: FilteredBreedsMap;
+  filterFormattedBreedsMapWithFlag?: FilteredBreedsMapWithFlag;
   breedImages: BreedImagesMap;
-  setFilterFormattedBreedsMap: (map: FilteredBreedsMap | undefined) => void;
-  setBreedImages: (map: BreedImagesMap) => void;
+  setFilterFormattedBreedsMapWithFlag: (
+    map: FilteredBreedsMapWithFlag | undefined,
+  ) => void;
 }>({
-  filterFormattedBreedsMap: new Map(),
+  filterFormattedBreedsMapWithFlag: {
+    filteredBreedsMap: new Map(),
+    isSomeBreedDisplayed: undefined,
+  },
   breedImages: new Map(),
-  setFilterFormattedBreedsMap: () => {},
-  setBreedImages: () => {},
+  setFilterFormattedBreedsMapWithFlag: () => {},
 });
 
 /**
@@ -34,7 +37,6 @@ export async function getAndStoreBreedImages(
   masterBreedName: string,
   subBreedName: string | undefined,
   breedImages: BreedImagesMap,
-  setBreedImages: (map: BreedImagesMap) => void,
   forceFetch?: boolean,
 ): Promise<Result<[string, string]>> {
   const isSubBreed = subBreedName && masterBreedName;
@@ -60,17 +62,18 @@ export async function getAndStoreBreedImages(
 
     // Update the context
     breedImages.set(_key, [twoRandomImages[0], twoRandomImages[1]]);
-    setBreedImages(new Map(breedImages));
     return [twoRandomImages[0], twoRandomImages[1]];
   }
 }
 
 export const GlobalDataProvider: React.FC = props => {
-  const [filterFormattedBreedsMap, setFilterFormattedBreedsMap] =
-    useState<FilteredBreedsMap>();
+  const [
+    filterFormattedBreedsMapWithFlag,
+    setFilterFormattedBreedsMapWithFlag,
+  ] = useState<FilteredBreedsMapWithFlag>();
   // As for the breed images we will let the user populate the map, by pressing on the breed names
   // So we don't have to build the map on mount
-  const [breedImages, setBreedImages] = useState<BreedImagesMap>(new Map());
+  const [breedImages] = useState<BreedImagesMap>(new Map());
 
   const isMounted = useIsMounted();
 
@@ -88,16 +91,19 @@ export const GlobalDataProvider: React.FC = props => {
     if (isFailure(allBreeds)) {
       return allBreeds;
     }
-    setFilterFormattedBreedsMap(getFilterFormattedBreeds(allBreeds));
+    setFilterFormattedBreedsMapWithFlag({
+      filteredBreedsMap: getFilterFormattedBreeds(allBreeds),
+      isSomeBreedDisplayed: undefined,
+    });
   }
 
   return (
     <GlobalDataContext.Provider
       value={{
-        filterFormattedBreedsMap: filterFormattedBreedsMap,
+        filterFormattedBreedsMapWithFlag: filterFormattedBreedsMapWithFlag,
         breedImages: breedImages,
-        setFilterFormattedBreedsMap: setFilterFormattedBreedsMap,
-        setBreedImages: setBreedImages,
+        setFilterFormattedBreedsMapWithFlag:
+          setFilterFormattedBreedsMapWithFlag,
       }}>
       {props.children}
     </GlobalDataContext.Provider>

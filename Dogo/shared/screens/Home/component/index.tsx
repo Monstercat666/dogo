@@ -1,24 +1,42 @@
-import * as React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import React from 'react';
+import {ActivityIndicator, View, Text} from 'react-native';
 import {BreedsList} from '../../../components/BreedsList/container';
 import {Filter} from '../../../components/Filter/container';
 import {Styles} from './Styles';
 import Colors from '../../../styles/Colors';
-import {FilteredBreedsMap} from '../../../util/Types';
+import {FilteredBreedsMapWithFlag} from '../../../util/Types';
+import strings from '../../../localization/Localization';
+import {Sort} from '../../../components/Sort/Sort';
 
 interface Props {
-  filterFormattedBreedsMap?: FilteredBreedsMap;
+  filterFormattedBreedsMapWithFlag?: FilteredBreedsMapWithFlag;
   filterBreeds: (input?: string) => void;
 }
 
 export const HomeComponent: React.FC<Props> = props => {
-  const {filterFormattedBreedsMap, filterBreeds} = props;
+  const {filterFormattedBreedsMapWithFlag, filterBreeds} = props;
+
   return (
     <View style={Styles.container}>
-      {filterFormattedBreedsMap ? (
+      {filterFormattedBreedsMapWithFlag ? (
         <>
           <Filter onChange={filterBreeds} />
-          <BreedsList breeds={filterFormattedBreedsMap} />
+
+          {filterFormattedBreedsMapWithFlag.isSomeBreedDisplayed === false ? (
+            <Text style={Styles.noMasterBreedTextStyle}>
+              {strings.noMasterBreed}
+            </Text>
+          ) : (
+            <>
+              <Sort
+                handleAscendingSorting={() => {}}
+                handleDescendingSorting={() => {}}
+              />
+              <BreedsList
+                breeds={filterFormattedBreedsMapWithFlag.filteredBreedsMap}
+              />
+            </>
+          )}
         </>
       ) : (
         <ActivityIndicator

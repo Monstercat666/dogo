@@ -6,12 +6,14 @@ let strings = new LocalizedStrings({
     filterPlaceHolder: 'Filter the Breeds',
     back: 'Back',
     gallery: 'Gallery',
+    noMasterBreed: 'Oops! No Dogo :(',
   },
   fr: {
     dogo: 'Dogo',
     filterPlaceHolder: 'Filtrer les Races',
     back: 'Retour',
     gallery: 'Gallerie',
+    noMasterBreed: 'Oops! Pas de Dogo :(',
   },
 });
 

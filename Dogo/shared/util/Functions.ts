@@ -7,7 +7,11 @@ import {
   URL,
 } from '../../backend/api/Api';
 import {Result} from './Failure';
-import {MasterAndSubBreeds, FilteredBreedsMap} from './Types';
+import {
+  MasterAndSubBreeds,
+  FilteredBreedsMap,
+  FilteredBreedsMapWithFlag,
+} from './Types';
 import _ from 'lodash';
 
 const BreedsSeperator = '-';
@@ -68,16 +72,19 @@ export function getFilterFormattedBreeds(
 }
 
 export function filterBreeds(
-  allBreeds: FilteredBreedsMap,
+  filteredBreedsMap: FilteredBreedsMap,
   input?: string,
-): FilteredBreedsMap {
-  Array.from(allBreeds.values()).forEach(value => {
-    // The flag below is to keep track if any the belonging subBreeds is matching the filter input
+): FilteredBreedsMapWithFlag {
+  let masterBreedFlag = false;
+  const _input = input?.toLocaleLowerCase();
+  Array.from(filteredBreedsMap.values()).forEach(value => {
+    // The flag below is to keep track if any the belonging subBreeds is matching the filter input.
+    // If so, we'll un-hide(!hidden) the master breed automaticaly regardless if it matches the filter input or not
     let subBreedFlag = false;
 
-    if (input) {
+    if (_input) {
       value.subBreeds.forEach(subBreed => {
-        if (_.includes(subBreed.name, input)) {
+        if (_.includes(subBreed.name, _input)) {
           subBreed.hidden = false;
           if (!subBreedFlag) {
             subBreedFlag = true;
@@ -92,14 +99,20 @@ export function filterBreeds(
       });
     }
 
-    if (!input || subBreedFlag || _.includes(value.name, input)) {
+    if (!_input || subBreedFlag || _.includes(value.name, _input)) {
       value.hidden = false;
+      if (!masterBreedFlag) {
+        masterBreedFlag = true;
+      }
     } else {
       value.hidden = true;
     }
   });
 
-  return allBreeds;
+  return {
+    filteredBreedsMap: filteredBreedsMap,
+    isSomeBreedDisplayed: masterBreedFlag,
+  };
 }
 
 function constructListAllBreedsURL(): string {

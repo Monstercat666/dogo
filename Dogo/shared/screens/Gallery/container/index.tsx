@@ -22,7 +22,7 @@ interface Props {
 }
 
 export const Gallery: React.FC<Props> = props => {
-  const {breedImages, setBreedImages} = useContext(GlobalDataContext);
+  const {breedImages} = useContext(GlobalDataContext);
 
   const [images, setImages] = useState<[string, string]>();
 
@@ -53,7 +53,6 @@ export const Gallery: React.FC<Props> = props => {
       masterBreedName,
       subBreedName,
       breedImages,
-      setBreedImages,
       forceFetch,
     );
     if (!isMounted.current) {

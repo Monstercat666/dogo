@@ -36,12 +36,16 @@ export const MasterSection: React.FC<Props> = props => {
           </TouchableOpacity>
           {masterBreed.subBreeds.map(subBreed => {
             return (
-              <SubSection
-                key={subBreed.name}
-                containerStyle={Styles.divider}
-                masterBreed={masterBreed}
-                subBreed={subBreed}
-              />
+              <>
+                {!subBreed.hidden && (
+                  <SubSection
+                    key={subBreed.name}
+                    containerStyle={Styles.divider}
+                    masterBreed={masterBreed}
+                    subBreed={subBreed}
+                  />
+                )}
+              </>
             );
           })}
         </View>

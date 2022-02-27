@@ -1,7 +1,13 @@
 export type MasterAndSubBreeds = {
   [masterBreed: string]: string[];
 };
+
 export type FilteredBreedsMap = Map<string, FilteredMasterBreeds>;
+
+export type FilteredBreedsMapWithFlag = {
+  filteredBreedsMap: FilteredBreedsMap;
+  isSomeBreedDisplayed?: boolean;
+};
 
 export type FilteredMasterBreeds = {
   name: string;
