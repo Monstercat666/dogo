@@ -1,21 +1,32 @@
 import * as React from 'react';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {BreedsList} from '../../../components/BreedsList/container';
 import {Filter} from '../../../components/Filter/container';
-import {MasterAndSubBreeds} from '../../../util/Functions';
 import {Styles} from './Styles';
+import Colors from '../../../styles/Colors';
+import {FilteredBreedsMap} from '../../../util/Types';
 
-export interface Props {
-  allBreeds?: MasterAndSubBreeds;
+interface Props {
+  filterFormattedBreedsMap?: FilteredBreedsMap;
+  filterBreeds: (input?: string) => void;
 }
 
 export const HomeComponent: React.FC<Props> = props => {
-  const {allBreeds} = props;
-
+  const {filterFormattedBreedsMap, filterBreeds} = props;
   return (
     <View style={Styles.container}>
-      <Filter onChange={() => {}} />
-      <BreedsList breeds={allBreeds} />
+      {filterFormattedBreedsMap ? (
+        <>
+          <Filter onChange={filterBreeds} />
+          <BreedsList breeds={filterFormattedBreedsMap} />
+        </>
+      ) : (
+        <ActivityIndicator
+          size={'large'}
+          color={Colors.Blue}
+          style={Styles.activityIndicatorStyle}
+        />
+      )}
     </View>
   );
 };
