@@ -7,6 +7,7 @@ import {GlobalDataProvider} from '../context/GlobalContext';
 import {Gallery} from '../screens/Gallery/container';
 import strings from '../localization/Localization';
 import Colors from '../styles/Colors';
+import {StatusBar} from 'react-native';
 
 export enum RouteName {
   HomeScreen = 'HomeScreen',
@@ -22,29 +23,32 @@ const Stack = createNativeStackNavigator();
 
 export const Routes: React.FC = () => {
   return (
-    <NavigationContainer>
-      <GlobalDataProvider>
-        <Stack.Navigator
-          initialRouteName={RouteName.HomeScreen}
-          screenOptions={{
-            headerStyle: Styles.headerStyle,
-            headerTintColor: Colors.White,
-          }}>
-          <Stack.Screen
-            name={RouteName.HomeScreen}
-            component={Home}
-            options={{title: strings.dogo}}
-          />
-          <Stack.Screen
-            name={RouteName.GalleryScreen}
-            component={Gallery}
-            options={{
-              headerBackTitle: strings.back,
-              title: '',
-            }}
-          />
-        </Stack.Navigator>
-      </GlobalDataProvider>
-    </NavigationContainer>
+    <>
+      <StatusBar hidden={false} backgroundColor={Colors.Blue} />
+      <NavigationContainer>
+        <GlobalDataProvider>
+          <Stack.Navigator
+            initialRouteName={RouteName.HomeScreen}
+            screenOptions={{
+              headerStyle: Styles.headerStyle,
+              headerTintColor: Colors.White,
+            }}>
+            <Stack.Screen
+              name={RouteName.HomeScreen}
+              component={Home}
+              options={{title: strings.dogo}}
+            />
+            <Stack.Screen
+              name={RouteName.GalleryScreen}
+              component={Gallery}
+              options={{
+                headerBackTitle: strings.back,
+                title: '',
+              }}
+            />
+          </Stack.Navigator>
+        </GlobalDataProvider>
+      </NavigationContainer>
+    </>
   );
 };

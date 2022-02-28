@@ -79,23 +79,23 @@ export const GlobalDataProvider: React.FC = props => {
 
   useEffect(() => {
     InteractionManager.runAfterInteractions(() => {
+      async function _getAllBreeds() {
+        const allBreeds = await getAllBreeds();
+        if (!isMounted.current) {
+          return;
+        }
+        if (isFailure(allBreeds)) {
+          return allBreeds;
+        }
+        setFilterFormattedBreedsMapWithFlag({
+          filteredBreedsMap: getFilterFormattedBreeds(allBreeds),
+          isSomeBreedDisplayed: undefined,
+        });
+      }
+
       _getAllBreeds();
     });
-  }, []);
-
-  async function _getAllBreeds() {
-    const allBreeds = await getAllBreeds();
-    if (!isMounted.current) {
-      return;
-    }
-    if (isFailure(allBreeds)) {
-      return allBreeds;
-    }
-    setFilterFormattedBreedsMapWithFlag({
-      filteredBreedsMap: getFilterFormattedBreeds(allBreeds),
-      isSomeBreedDisplayed: undefined,
-    });
-  }
+  }, [isMounted]);
 
   return (
     <GlobalDataContext.Provider

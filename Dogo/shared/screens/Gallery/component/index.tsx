@@ -2,11 +2,12 @@ import React, {useState} from 'react';
 import {Image, RefreshControl} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useIsMounted} from '../../../hooks/useIsMounted';
+import {Result} from '../../../util/Failure';
 import Styles from './Styles';
 
 interface Props {
   images: [string, string];
-  handleRefresh: () => void;
+  handleRefresh: () => Promise<Result<undefined>>;
 }
 
 export const GalleryComponent: React.FC<Props> = props => {
