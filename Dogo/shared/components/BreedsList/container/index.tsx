@@ -1,9 +1,10 @@
 import React from 'react';
-import {FilteredBreedsMap} from '../../../util/Types';
+import {FilteredMasterBreeds} from '../../../util/Types';
 import {BreedsListComponent} from '../component/index';
 
 export interface Props {
-  breeds: FilteredBreedsMap;
+  breeds: FilteredMasterBreeds[];
+  isDesc: boolean;
 }
 
 export const BreedsList: React.FC<Props> = props => {

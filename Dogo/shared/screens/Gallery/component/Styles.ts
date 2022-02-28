@@ -6,7 +6,6 @@ const Styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: Spacings.Large,
     paddingVertical: Spacings.Medium,
-    borderWidth: 1,
   },
   contentContainer: {flex: 1},
   firstImage: {height: '40%', marginBottom: Spacings.Small},

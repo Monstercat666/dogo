@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ActivityIndicator, View, Text} from 'react-native';
 import {BreedsList} from '../../../components/BreedsList/container';
 import {Filter} from '../../../components/Filter/container';
@@ -16,6 +16,8 @@ interface Props {
 export const HomeComponent: React.FC<Props> = props => {
   const {filterFormattedBreedsMapWithFlag, filterBreeds} = props;
 
+  const [isDesc, setIsDesc] = useState(false);
+
   return (
     <View style={Styles.container}>
       {filterFormattedBreedsMapWithFlag ? (
@@ -28,12 +30,12 @@ export const HomeComponent: React.FC<Props> = props => {
             </Text>
           ) : (
             <>
-              <Sort
-                handleAscendingSorting={() => {}}
-                handleDescendingSorting={() => {}}
-              />
+              <Sort handleToggle={setIsDesc} />
               <BreedsList
-                breeds={filterFormattedBreedsMapWithFlag.filteredBreedsMap}
+                breeds={Array.from(
+                  filterFormattedBreedsMapWithFlag.filteredBreedsMap.values(),
+                )}
+                isDesc={isDesc}
               />
             </>
           )}
