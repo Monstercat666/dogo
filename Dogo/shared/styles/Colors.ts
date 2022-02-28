@@ -5,6 +5,7 @@ const Colors = {
   GreenLight: '#78909C',
   Black: 'black',
   White: 'white',
+  Grey: 'grey',
 };
 
 export default Colors;

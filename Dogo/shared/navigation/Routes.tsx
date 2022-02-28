@@ -7,7 +7,6 @@ import {GlobalDataProvider} from '../context/GlobalContext';
 import {Gallery} from '../screens/Gallery/container';
 import strings from '../localization/Localization';
 import Colors from '../styles/Colors';
-import {StatusBar} from 'react-native';
 
 export enum RouteName {
   HomeScreen = 'HomeScreen',
@@ -24,7 +23,6 @@ const Stack = createNativeStackNavigator();
 export const Routes: React.FC = () => {
   return (
     <>
-      <StatusBar hidden={false} backgroundColor={Colors.Blue} />
       <NavigationContainer>
         <GlobalDataProvider>
           <Stack.Navigator
@@ -32,6 +30,7 @@ export const Routes: React.FC = () => {
             screenOptions={{
               headerStyle: Styles.headerStyle,
               headerTintColor: Colors.White,
+              headerTitleAlign: 'center',
             }}>
             <Stack.Screen
               name={RouteName.HomeScreen}

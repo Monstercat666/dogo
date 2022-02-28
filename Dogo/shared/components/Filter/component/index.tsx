@@ -15,7 +15,7 @@ export const FilterComponent: React.FC<Props> = props => {
   };
 
   return (
-    <View style={containerStyle ?? Styles.container}>
+    <View style={[Styles.container, containerStyle]}>
       <TextInput
         placeholder={strings.filterPlaceHolder}
         placeholderTextColor={Colors.Black}

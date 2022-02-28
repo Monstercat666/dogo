@@ -1,14 +1,15 @@
 import {StyleSheet} from 'react-native';
+import Colors from '../../../styles/Colors';
 import Fonts from '../../../styles/Fonts';
 import Spacings from '../../../styles/Spacings';
 
 const Styles = StyleSheet.create({
   container: {
-    width: '100%',
     padding: Spacings.Small,
   },
   textInput: {
-    borderWidth: 1,
+    borderWidth: 2,
+    borderColor: Colors.Grey,
     paddingVertical: Spacings.Small,
     paddingRight: Spacings.Small,
     fontSize: Fonts.Small,

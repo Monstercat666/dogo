@@ -22,22 +22,28 @@ export const HomeComponent: React.FC<Props> = props => {
     <View style={Styles.container}>
       {filterFormattedBreedsMapWithFlag ? (
         <>
-          <Filter onChange={filterBreeds} />
+          <View style={Styles.rowContainer}>
+            <Filter
+              containerStyle={Styles.filterContainer}
+              onChange={filterBreeds}
+            />
+            <Sort
+              containerStyle={Styles.sortContainer}
+              handleToggle={setIsDesc}
+            />
+          </View>
 
           {filterFormattedBreedsMapWithFlag.isSomeBreedDisplayed === false ? (
             <Text style={Styles.noMasterBreedTextStyle}>
               {strings.noMasterBreed}
             </Text>
           ) : (
-            <>
-              <Sort handleToggle={setIsDesc} />
-              <BreedsList
-                breeds={Array.from(
-                  filterFormattedBreedsMapWithFlag.filteredBreedsMap.values(),
-                )}
-                isDesc={isDesc}
-              />
-            </>
+            <BreedsList
+              breeds={Array.from(
+                filterFormattedBreedsMapWithFlag.filteredBreedsMap.values(),
+              )}
+              isDesc={isDesc}
+            />
           )}
         </>
       ) : (
