@@ -7,6 +7,7 @@ import {GlobalDataProvider} from '../context/GlobalContext';
 import {Gallery} from '../screens/Gallery/container';
 import strings from '../localization/Localization';
 import Colors from '../styles/Colors';
+import Fonts from '../styles/Fonts';
 
 export enum RouteName {
   HomeScreen = 'HomeScreen',
@@ -35,7 +36,10 @@ export const Routes: React.FC = () => {
             <Stack.Screen
               name={RouteName.HomeScreen}
               component={Home}
-              options={{title: strings.dogo}}
+              options={{
+                title: strings.dogo,
+                headerTitleStyle: {fontSize: Fonts.Standard},
+              }}
             />
             <Stack.Screen
               name={RouteName.GalleryScreen}
@@ -43,6 +47,7 @@ export const Routes: React.FC = () => {
               options={{
                 headerBackTitle: strings.back,
                 title: '',
+                headerTitleStyle: {fontSize: Fonts.Standard},
               }}
             />
           </Stack.Navigator>

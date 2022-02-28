@@ -75,43 +75,46 @@ export function filterBreeds(
   filteredBreedsMap: FilteredBreedsMap,
   input?: string,
 ): FilteredBreedsMapWithFlag {
-  let masterBreedFlag = false;
+  let existsOneAtLeast = false;
   const _input = input?.toLocaleLowerCase();
   Array.from(filteredBreedsMap.values()).forEach(value => {
-    // The flag below is to keep track if any the belonging subBreeds is matching the filter input.
-    // If so, we'll un-hide(!hidden) the master breed automaticaly regardless if it matches the filter input or not
-    let subBreedFlag = false;
+    if (!_input || _.includes(value.name, _input)) {
+      value.hidden = false;
+      if (!existsOneAtLeast) {
+        existsOneAtLeast = true;
+      }
 
-    if (_input) {
-      value.subBreeds.forEach(subBreed => {
-        if (_.includes(subBreed.name, _input)) {
-          subBreed.hidden = false;
-          if (!subBreedFlag) {
-            subBreedFlag = true;
-          }
-        } else {
-          subBreed.hidden = true;
-        }
-      });
-    } else {
+      // Following the design provided: the master breed name is added to the sub breed name
+      // So if the filter input is included in the master breed name
+      // it'll be included in the sub breeds
       value.subBreeds.forEach(subBreed => {
         subBreed.hidden = false;
       });
-    }
-
-    if (!_input || subBreedFlag || _.includes(value.name, _input)) {
-      value.hidden = false;
-      if (!masterBreedFlag) {
-        masterBreedFlag = true;
-      }
     } else {
       value.hidden = true;
+
+      if (_input) {
+        value.subBreeds.forEach(subBreed => {
+          if (_.includes(subBreed.name, _input)) {
+            subBreed.hidden = false;
+            if (!existsOneAtLeast) {
+              existsOneAtLeast = true;
+            }
+          } else {
+            subBreed.hidden = true;
+          }
+        });
+      } else {
+        value.subBreeds.forEach(subBreed => {
+          subBreed.hidden = false;
+        });
+      }
     }
   });
 
   return {
     filteredBreedsMap: filteredBreedsMap,
-    isSomeBreedDisplayed: masterBreedFlag,
+    isSomeBreedDisplayed: existsOneAtLeast,
   };
 }
 

@@ -65,7 +65,9 @@ export const Gallery: React.FC<Props> = props => {
       function handleScreenTitle() {
         navigation.setOptions({
           title: capitalizeFirstLetter(
-            subBreedName ?? masterBreedName ?? strings.gallery,
+            subBreedName
+              ? `${subBreedName} ${capitalizeFirstLetter(masterBreedName)}`
+              : masterBreedName ?? strings.gallery,
           ),
         });
       }

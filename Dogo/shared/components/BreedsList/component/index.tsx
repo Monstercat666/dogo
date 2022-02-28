@@ -8,16 +8,14 @@ export const BreedsListComponent: React.FC<Props> = props => {
   const {breeds, isDesc} = props;
 
   return (
-    <>
-      <FlatList
-        keyExtractor={breed => breed.name}
-        data={isDesc ? breeds.reverse() : breeds}
-        renderItem={({item}) => {
-          return (
-            <MasterSection masterBreed={item} containerStyle={Styles.divider} />
-          );
-        }}
-      />
-    </>
+    <FlatList
+      keyExtractor={breed => breed.name}
+      data={isDesc ? breeds.reverse() : breeds}
+      renderItem={({item}) => {
+        return (
+          <MasterSection masterBreed={item} containerStyle={Styles.divider} />
+        );
+      }}
+    />
   );
 };

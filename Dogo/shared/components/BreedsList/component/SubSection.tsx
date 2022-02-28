@@ -29,7 +29,8 @@ export const SubSection: React.FC<Props> = props => {
       style={[Styles.subSectionContainer, containerStyle]}
       onPress={handleNavigation}>
       <Text style={Styles.subSectionTextStyle}>
-        {capitalizeFirstLetter(subBreed.name)}
+        {capitalizeFirstLetter(subBreed.name)}{' '}
+        {capitalizeFirstLetter(masterBreed.name)}
       </Text>
     </TouchableOpacity>
   );

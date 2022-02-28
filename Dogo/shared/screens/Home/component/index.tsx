@@ -33,18 +33,17 @@ export const HomeComponent: React.FC<Props> = props => {
             />
           </View>
 
-          {filterFormattedBreedsMapWithFlag.isSomeBreedDisplayed === false ? (
+          {filterFormattedBreedsMapWithFlag.isSomeBreedDisplayed === false && (
             <Text style={Styles.noMasterBreedTextStyle}>
               {strings.noMasterBreed}
             </Text>
-          ) : (
-            <BreedsList
-              breeds={Array.from(
-                filterFormattedBreedsMapWithFlag.filteredBreedsMap.values(),
-              )}
-              isDesc={isDesc}
-            />
           )}
+          <BreedsList
+            breeds={Array.from(
+              filterFormattedBreedsMapWithFlag.filteredBreedsMap.values(),
+            )}
+            isDesc={isDesc}
+          />
         </>
       ) : (
         <ActivityIndicator

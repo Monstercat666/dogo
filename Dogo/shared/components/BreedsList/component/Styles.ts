@@ -10,14 +10,14 @@ const Styles = StyleSheet.create({
   },
   divider: {marginBottom: 2},
   masterSectionTextStyle: {
-    fontSize: Fonts.Standard,
+    fontSize: Fonts.Medium,
     color: Colors.White,
   },
   subSectionContainer: {
     paddingVertical: Spacings.Small,
     backgroundColor: Colors.GreenLight,
     paddingRight: Spacings.Small,
-    paddingLeft: Spacings.Medium,
+    paddingLeft: Spacings.Standard,
   },
   subSectionTextStyle: {
     fontSize: Fonts.Medium,

@@ -24,31 +24,29 @@ export const MasterSection: React.FC<Props> = props => {
   }
 
   return (
-    <>
+    <View>
       {!masterBreed.hidden && (
-        <View>
-          <TouchableOpacity
-            style={[Styles.masterSectionContainer, containerStyle]}
-            onPress={handleNavigation}>
-            <Text style={Styles.masterSectionTextStyle} numberOfLines={1}>
-              {capitalizeFirstLetter(masterBreed.name)}
-            </Text>
-          </TouchableOpacity>
-          {masterBreed.subBreeds.map(subBreed => {
-            return (
-              <View key={subBreed.name}>
-                {!subBreed.hidden && (
-                  <SubSection
-                    containerStyle={Styles.divider}
-                    masterBreed={masterBreed}
-                    subBreed={subBreed}
-                  />
-                )}
-              </View>
-            );
-          })}
-        </View>
+        <TouchableOpacity
+          style={[Styles.masterSectionContainer, containerStyle]}
+          onPress={handleNavigation}>
+          <Text style={Styles.masterSectionTextStyle} numberOfLines={1}>
+            {capitalizeFirstLetter(masterBreed.name)}
+          </Text>
+        </TouchableOpacity>
       )}
-    </>
+      {masterBreed.subBreeds.map(subBreed => {
+        return (
+          <View key={subBreed.name}>
+            {!subBreed.hidden && (
+              <SubSection
+                containerStyle={Styles.divider}
+                masterBreed={masterBreed}
+                subBreed={subBreed}
+              />
+            )}
+          </View>
+        );
+      })}
+    </View>
   );
 };
